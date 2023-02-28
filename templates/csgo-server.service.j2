@@ -1,0 +1,17 @@
+[Unit]
+Description=Counter-Strike Global Offensive Dedicated Server
+Documentation=https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Dedicated_Servers
+Wants=network-online.target
+After=syslog.target network.target local-fs.target
+
+[Service]
+WorkingDirectory={{ csgo_server_install_dir }}
+Environment="LD_LIBRARY_PATH={{ csgo_server_install_dir }}:{{ csgo_server_install_dir }}/bin"
+User={{ csgo_server_user }}
+Group={{ csgo_server_user }}
+ExecStart={{ csgo_server_install_dir }}/srcds_run -console -usercon +game_type 0 +game_mode 1 +mapgroup mg_active +map {{ csgo_server_starting_map }} -tickrate 128 +sv_setsteamaccount {{ csgo_server_gslt }} +rcon_password {{ csgo_server_rcon_pw }} -maxplayer_override {{ csgo_server_maxplayers }} -ip {{ csgo_server_ip }} -port {{ csgo_server_port }} +net_public_adr {{ csgo_server_public_ip }} -addhltv1 +sv_password {{ csgo_server_sv_password }} +sv_load_forced_client_names_file "{{ csgo_server_names_file }}" +exec autoexec.cfg +exec server.cfg
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  role_name: csgo_server
+  author: hofnarr
+  description: 'Counter Strike: Global Offensive (CSGO) Dedicated Server'
+  license: MIT
+
+  dependencies:
+    - hofnarrr.steamcmd
+
+  galaxy_tags:
+    - csgo
+    - counter-Strike
+    - srcds
+    - valve
+    - steam

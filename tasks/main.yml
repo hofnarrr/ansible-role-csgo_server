@@ -1,0 +1,81 @@
+---
+- block:
+  - name: csgo_server | add user for CS:GO srcds
+    ansible.builtin.user:
+      name: '{{ csgo_server_user }}'
+      home: '{{ csgo_server_user_home }}'
+      password_lock: yes
+    tags: csgo_server_srcds
+      
+  - name: csgo_server | install CS:GO srcds
+    ansible.builtin.shell: su -s /bin/bash -c "/usr/games/steamcmd +force_install_dir {{ csgo_server_install_dir }} +login anonymous +app_update 740 validate +quit" {{ csgo_server_user }}
+    tags: csgo_server_srcds
+
+  - name: csgo_server | extract eBot CSay
+    ansible.builtin.unarchive:
+      src: http://www.esport-tools.net/download/CSay-CSGO.zip
+      remote_src: yes
+      dest: '{{ csgo_server_install_dir }}/csgo/'
+      owner: '{{ csgo_server_user }}'
+      group: '{{ csgo_server_user }}'
+      mode: u=rwx,g=rx,o=rx
+
+  - block:
+    - name: csgo_server | render configs
+      ansible.builtin.template:
+        src: cfg/{{ item }}.cfg.j2
+        dest: '{{ csgo_server_install_dir }}/csgo/cfg/{{ item }}.cfg'
+        owner: '{{ csgo_server_user }}'
+        group: '{{ csgo_server_user }}'
+        mode: u=rw,g=r,o=r
+      loop:
+        - csgo
+        - server
+        - gotv
+      notify: restart srcds
+
+    - name: csgo_server | copy configs
+      ansible.builtin.copy:
+        src: '{{ item }}'
+        dest: '{{ csgo_server_install_dir }}/csgo/cfg'
+        owner: '{{ csgo_server_user }}'
+        group: '{{ csgo_server_user }}'
+        mode: u=rw,g=r,o=r
+      notify: restart srcds
+      loop:
+        - autoexec.cfg
+        - gamemode_competitive.cfg
+
+    - name: csgo_server | copy names file
+      ansible.builtin.copy:
+        src: names.txt
+        dest: '{{ csgo_server_install_dir }}/csgo/{{ csgo_server_names_file }}'
+        owner: '{{ csgo_server_user }}'
+        group: '{{ csgo_server_user }}'
+        mode: u=rw,g=r,o=r
+      when: csgo_server_copy_names_file | bool
+
+    - name: csgo_server | disable warmup arenas
+      ansible.builtin.file:
+        path: '{{ csgo_server_install_dir }}/csgo/scripts/vscripts/warmup/{{ item }}'
+        state: absent
+      loop:
+        - warmup_arena.nut
+        - warmup_teleport.nut
+        
+    - name: csgo_server | render systemd service file
+      ansible.builtin.template:
+        src: csgo-server.service.j2
+        dest: /etc/systemd/system/{{ csgo_server_systemd_service }}.service
+      notify: restart srcds
+
+    - name: csgo_server | enable and start csgo server service
+      ansible.builtin.systemd:
+        name: '{{ csgo_server_systemd_service }}'
+        enabled: yes
+        state: started
+        daemon_reload: yes
+    
+    tags: csgo_server_cfg
+
+  become: yes

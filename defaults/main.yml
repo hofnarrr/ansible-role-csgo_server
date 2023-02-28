@@ -1,0 +1,28 @@
+---
+csgo_server_systemd_service: csgo-server
+csgo_server_user: csgo
+csgo_server_user_home: /opt/csgo
+csgo_server_install_dir: /opt/csgo/srcds
+csgo_server_maxplayers: 20
+csgo_server_starting_map: de_dust2
+csgo_server_names_file: names.txt
+csgo_server_ip: 0.0.0.0
+csgo_server_port: 27015
+csgo_server_copy_names_file: no
+
+csgo_server_logaddresses: []
+csgo_server_ex_logaddresses: []
+csgo_server_http_logaddresses: []
+
+csgo_server_tv_name: GOTV
+csgo_server_tv_title: GOTV
+csgo_server_tv_port: 27020
+csgo_server_tv_port1: 27021
+csgo_server_tv_password: tvpass
+csgo_server_tv_password1: tvpass1
+csgo_server_tv_relaypassword: relaypass
+csgo_server_tv_allow_camera_man_steamid: 0
+
+# csgo_server_sv_password: serverpw
+# csgo_server_gslt: 
+# csgo_server_rcon_pw: insecure-rcon-password

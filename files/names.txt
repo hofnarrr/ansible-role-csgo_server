@@ -1,0 +1,4 @@
+"forced client names"
+{
+   // "steamid64" "Forced Name"
+}

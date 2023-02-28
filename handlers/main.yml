@@ -1,0 +1,5 @@
+---
+- name: restart srcds
+  ansible.builtin.systemd:
+    name: '{{ csgo_server_systemd_service }}'
+    state: restarted
