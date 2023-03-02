@@ -186,15 +186,15 @@ sv_max_queries_sec_global 500
 mp_give_player_c4 0
 
 // logaddresses
-{%- for addr in csgo_server_logaddresses %}
+{% for addr in csgo_server_logaddresses %}
 logaddress_add {{ addr }}
 {% endfor %}
 
-{%- for addr in csgo_server_ex_logaddresses %}
+{% for addr in csgo_server_ex_logaddresses %}
 logaddress_add_ex {{ addr }}
 {% endfor %}
 
-{%- for addr in csgo_server_http_logaddresses %}
+{% for addr in csgo_server_http_logaddresses %}
 logaddress_add_http "{{ addr }}"
 {% endfor %}
 
