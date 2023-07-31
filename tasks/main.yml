@@ -64,6 +64,7 @@
       loop:
         - warmup_arena.nut
         - warmup_teleport.nut
+      when: csgo_server_disable_warmup_arena | bool
 
     - name: csgo_server | copy extra files
       ansible.builtin.copy:
