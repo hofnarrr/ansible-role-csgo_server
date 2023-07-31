@@ -28,11 +28,12 @@
         owner: '{{ csgo_server_user }}'
         group: '{{ csgo_server_user }}'
         mode: u=rw,g=r,o=r
+      notify: restart srcds
       loop:
         - csgo
         - server
         - gotv
-      notify: restart srcds
+      when: csgo_server_copy_default_config | bool
 
     - name: csgo_server | copy configs
       ansible.builtin.copy:
@@ -45,6 +46,7 @@
       loop:
         - autoexec.cfg
         - gamemode_competitive.cfg
+      when: csgo_server_copy_default_config | bool
 
     - name: csgo_server | copy names file
       ansible.builtin.copy:
@@ -62,6 +64,17 @@
       loop:
         - warmup_arena.nut
         - warmup_teleport.nut
+
+    - name: csgo_server | copy extra files
+      ansible.builtin.copy:
+        src: '{{ csgo_server_extra_files_path }}/'
+        dest: '{{ csgo_server_install_dir }}'
+        owner: '{{ csgo_server_user }}'
+        group: '{{ csgo_server_user }}'
+        mode: u=rw,g=r,o=r
+      when:
+        - csgo_server_copy_extra_files | bool
+        - csgo_server_extra_files_path | d(False)
         
     - name: csgo_server | render systemd service file
       ansible.builtin.template:

@@ -9,6 +9,10 @@ csgo_server_names_file: names.txt
 csgo_server_ip: 0.0.0.0
 csgo_server_port: 27015
 csgo_server_copy_names_file: no
+csgo_server_copy_default_config: yes
+csgo_server_copy_extra_files: no
+  
+# csgo_server_extra_files_path: /path/to/extra/files
 
 csgo_server_logaddresses: []
 csgo_server_ex_logaddresses: []
